@@ -1,0 +1,50 @@
+{
+  "name": "jfrog-npm-login",
+  "version": "0.0.1",
+  "description": "npm login CLI for jFrog Artifactory (version 5.4 or below)",
+  "main": "index.js",
+  "bin": {
+    "jnl": "./cli.js",
+    "jfrog-npm-login": "./cli.js"
+  },
+  "keywords": [
+    "cli",
+    "jfrog",
+    "npm",
+    "login",
+    "artifactory"
+  ],
+  "homepage": "https://github.com/manrueda/jfrog-npm-login#readme",
+  "bugs": {
+    "url": "https://github.com/manrueda/jfrog-npm-login/issues"
+  },
+  "license": "MIT",
+  "author": "Manuel Rueda <manuel.rueda.un@gmail.com> (https://manrueda.com/)",
+  "files": [
+    "cli.js",
+    "index.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/manrueda/jfrog-npm-login.git"
+  },
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "got": "^9.3.0",
+    "meow": "^5.0.0",
+    "npm": "^6.4.1"
+  },
+  "devDependencies": {
+    "husky": "^1.1.3",
+    "prettier": "1.15.1",
+    "pretty-quick": "^1.8.0"
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  }
+}
