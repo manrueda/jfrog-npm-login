@@ -1,6 +1,6 @@
 {
   "name": "jfrog-npm-login",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "npm login CLI for jFrog Artifactory (version 5.4 or below)",
   "main": "index.js",
   "bin": {
