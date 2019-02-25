@@ -73,7 +73,7 @@ async function deleteRegistry(keyToRemove) {
 }
 
 async function getNewConfiguration(key, token) {
-  await makesSense(key, token);
+  // await makesSense(key, token);
   if (!npm.config.loaded) {
     await loadNpm();
   }
