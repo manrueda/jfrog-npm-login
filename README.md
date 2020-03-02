@@ -2,7 +2,7 @@
 
 npm login CLI for jFrog Artifactory (version 5.4 or below).
 
-This CLI works with the jFrog API to get the npm authentification data and save it in your user level `.npmrc`.
+This CLI works with the jFrog API to get the npm authentication data and save it in your user level `.npmrc`.
 
 After version 5.4 of jFrog Artifactory, npm authentication can be done with `npm login`. This CLI is only useful for older versions.
 
@@ -29,7 +29,7 @@ jfrog-npm-login list
 Configures a new jFrog Artifactory registries for the user.
 
 ```bash
-jfrog-npm-login add --url //my-domain.com/artifactory/api/npm/default/ --token XXXXXXX
+jfrog-npm-login add --url https://my-domain.com/artifactory/api/npm/default/ --token XXXXXXX
 ```
 
 ### `delete`
@@ -37,5 +37,5 @@ jfrog-npm-login add --url //my-domain.com/artifactory/api/npm/default/ --token X
 Removes a configured jFrog Artifactory registries based on the URL.
 
 ```bash
-jfrog-npm-login delete --url //my-domain.com/artifactory/api/npm/default/
+jfrog-npm-login delete --url https://my-domain.com/artifactory/api/npm/default/
 ```

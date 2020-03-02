@@ -35,12 +35,7 @@ const cli = meow(
   {
     flags: {
       url: {
-        type: 'string',
-        alias: 'u'
-      },
-      url: {
-        type: 'string',
-        alias: 'u'
+        type: 'string'
       },
       token: {
         type: 'string'

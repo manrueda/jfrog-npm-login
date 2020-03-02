@@ -1,26 +1,23 @@
 const npm = require('npm');
 const got = require('got');
+const tunnel = require('tunnel');
 const { promisify } = require('util');
 const loadNpm = promisify(npm.load);
 const saveUserNpm = promisify(cb => npm.config.save('user', cb));
-const getBaseURL = url => {
-  const result = url.match(/(^.*?(\/api))/);
-  return result ? result[1] : null;
-};
 
 function normalizeKey(key) {
-  if (key.startsWith('https:')) {
-    key = key.replace('https://', '//');
-  }
-  if (key.startsWith('http:')) {
-    key = key.replace('http://', '//');
-  }
-  if (!key.startsWith('//')) {
+  // if (key.startsWith('https:')) {
+  //   key = key.replace('https://', 'https://');
+  // }
+  // if (key.startsWith('http:')) {
+  //   key = key.replace('http://', 'http://');
+  // }
+  if (key.startsWith('//')) {
     if (key.substring[0] !== '/') {
-      key = `//${key}`;
+      key = `https://${key}`;
     } else {
       if (key.substring[1] !== '/') {
-        key = `/${key}`;
+        key = `https:/${key}`;
       }
     }
   }
@@ -72,13 +69,35 @@ async function deleteRegistry(keyToRemove) {
   return saveUserNpm();
 }
 
+function getProxyAgent() {
+  if (process.env.HTTP_PROXY || process.env.HTTPS_PROXY) {
+    const { protocol, port, host } = new URL(
+      process.env.HTTP_PROXY || process.env.HTTPS_PROXY
+    );
+    if (protocol === 'https:') {
+      return tunnel.httpsOverHttps({
+        proxy: { port: parseInt(port || '80'), host }
+      });
+    } else {
+      console.log(protocol, port, host);
+      return tunnel.httpsOverHttp({
+        proxy: { port: parseInt(port || '80'), host }
+      });
+    }
+  } else {
+    return undefined;
+  }
+}
+
 async function getNewConfiguration(key, token) {
-  // await makesSense(key, token);
   if (!npm.config.loaded) {
     await loadNpm();
   }
-  const response = await got(`http:${key}auth/jfrog`, {
-    headers: { 'X-JFrog-Art-Api': token }
+  console.log(key);
+  const proxyAgent = getProxyAgent();
+  const response = await got(`${key}auth/jfrog`, {
+    headers: { 'X-JFrog-Art-Api': token },
+    agent: proxyAgent
   });
   const values = response.body.split('\n').map(v => v.split('='));
   for (const [key, value] of values) {
@@ -87,21 +106,6 @@ async function getNewConfiguration(key, token) {
     }
   }
   return saveUserNpm();
-}
-
-async function makesSense(key, token) {
-  const response = await got(`http:${getBaseURL(key)}/system/version`, {
-    headers: { 'X-JFrog-Art-Api': token },
-    json: true
-  });
-  const [major, minor] = response.body.version.split('.');
-  if (Number(major) >= 5 && Number(minor) >= 4) {
-    throw new Error(
-      `The jFrog server is in version ${
-        response.body.version
-      } you can user 'npm login' to authenticate.`
-    );
-  }
 }
 
 module.exports = {
